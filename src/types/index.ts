@@ -16,4 +16,4 @@ type Field = {
   rules: Rule[];
 };
 
-export type { Field };
+export type { Field, Option, Rule };
