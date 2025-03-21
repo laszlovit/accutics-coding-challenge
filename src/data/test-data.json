@@ -1,0 +1,227 @@
+[
+  {
+    "field_key": "field_1",
+    "field_name": "Field 1",
+    "options": [
+      { "option_label": "Option 1", "option_value": "option_1" },
+      { "option_label": "Option 2", "option_value": "option_2" },
+      { "option_label": "Option 3", "option_value": "option_3" },
+      { "option_label": "Option 4", "option_value": "option_4" },
+      { "option_label": "Option 5", "option_value": "option_5" }
+    ],
+    "rules": [
+      {
+        "rule_field_key": "field_2",
+        "rule_value": "option_2",
+        "children": [
+          {
+            "rule_field_key": "field_3",
+            "rule_value": "option_1",
+            "children": []
+          },
+          {
+            "rule_field_key": "field_4",
+            "rule_value": "option_3",
+            "children": []
+          }
+        ]
+      },
+      {
+        "rule_field_key": "field_2",
+        "rule_value": "option_3",
+        "children": [
+          {
+            "rule_field_key": "field_3",
+            "rule_value": "option_2",
+            "children": []
+          },
+          {
+            "rule_field_key": "field_4",
+            "rule_value": "option_4",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "field_key": "field_2",
+    "field_name": "Field 2",
+    "options": [
+      { "option_label": "Option 1", "option_value": "option_1" },
+      { "option_label": "Option 2", "option_value": "option_2" },
+      { "option_label": "Option 3", "option_value": "option_3" },
+      { "option_label": "Option 4", "option_value": "option_4" },
+      { "option_label": "Option 5", "option_value": "option_5" }
+    ],
+    "rules": [
+      {
+        "rule_field_key": "field_1",
+        "rule_value": "option_1",
+        "children": [
+          {
+            "rule_field_key": "field_3",
+            "rule_value": "option_1",
+            "children": []
+          },
+          {
+            "rule_field_key": "field_4",
+            "rule_value": "option_3",
+            "children": []
+          }
+        ]
+      },
+      {
+        "rule_field_key": "field_1",
+        "rule_value": "option_2",
+        "children": [
+          {
+            "rule_field_key": "field_3",
+            "rule_value": "option_2",
+            "children": []
+          },
+          {
+            "rule_field_key": "field_4",
+            "rule_value": "option_4",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "field_key": "field_3",
+    "field_name": "Field 3",
+    "options": [
+      { "option_label": "Option 1", "option_value": "option_1" },
+      { "option_label": "Option 2", "option_value": "option_2" },
+      { "option_label": "Option 3", "option_value": "option_3" },
+      { "option_label": "Option 4", "option_value": "option_4" },
+      { "option_label": "Option 5", "option_value": "option_5" }
+    ],
+    "rules": [
+      {
+        "rule_field_key": "field_1",
+        "rule_value": "option_5",
+        "children": [
+          {
+            "rule_field_key": "field_2",
+            "rule_value": "option_1",
+            "children": []
+          },
+          {
+            "rule_field_key": "field_4",
+            "rule_value": "option_3",
+            "children": []
+          }
+        ]
+      },
+      {
+        "rule_field_key": "field_1",
+        "rule_value": "option_4",
+        "children": [
+          {
+            "rule_field_key": "field_2",
+            "rule_value": "option_2",
+            "children": []
+          },
+          {
+            "rule_field_key": "field_4",
+            "rule_value": "option_4",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "field_key": "field_4",
+    "field_name": "Field 4",
+    "options": [
+      { "option_label": "Option 1", "option_value": "option_1" },
+      { "option_label": "Option 2", "option_value": "option_2" },
+      { "option_label": "Option 3", "option_value": "option_3" },
+      { "option_label": "Option 4", "option_value": "option_4" },
+      { "option_label": "Option 5", "option_value": "option_5" }
+    ],
+    "rules": [
+      {
+        "rule_field_key": "field_1",
+        "rule_value": "option_5",
+        "children": [
+          {
+            "rule_field_key": "field_2",
+            "rule_value": "option_1",
+            "children": []
+          },
+          {
+            "rule_field_key": "field_3",
+            "rule_value": "option_3",
+            "children": []
+          }
+        ]
+      },
+      {
+        "rule_field_key": "field_1",
+        "rule_value": "option_4",
+        "children": [
+          {
+            "rule_field_key": "field_2",
+            "rule_value": "option_2",
+            "children": []
+          },
+          {
+            "rule_field_key": "field_3",
+            "rule_value": "option_4",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "field_key": "field_5",
+    "field_name": "Field 5",
+    "options": [
+      { "option_label": "Option 1", "option_value": "option_1" },
+      { "option_label": "Option 2", "option_value": "option_2" },
+      { "option_label": "Option 3", "option_value": "option_3" },
+      { "option_label": "Option 4", "option_value": "option_4" },
+      { "option_label": "Option 5", "option_value": "option_5" }
+    ],
+    "rules": [
+      {
+        "rule_field_key": "field_1",
+        "rule_value": "option_5",
+        "children": [
+          {
+            "rule_field_key": "field_2",
+            "rule_value": "option_1",
+            "children": []
+          },
+          {
+            "rule_field_key": "field_3",
+            "rule_value": "option_3",
+            "children": []
+          }
+        ]
+      },
+      {
+        "rule_field_key": "field_1",
+        "rule_value": "option_4",
+        "children": [
+          {
+            "rule_field_key": "field_2",
+            "rule_value": "option_2",
+            "children": []
+          },
+          {
+            "rule_field_key": "field_3",
+            "rule_value": "option_4",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]
