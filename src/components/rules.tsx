@@ -1,7 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import FieldContext from '../context/field-context';
 import { Rule } from '../types';
-import { IconButton } from '@mui/material';
+import { FormControl, IconButton, InputLabel } from '@mui/material';
 import { Select, MenuItem, TextField, Button } from '@mui/material';
 import { TrashIcon } from '@heroicons/react/24/outline';
 
@@ -43,25 +43,75 @@ function RuleItem({ rule }: { rule: Rule }) {
 }
 
 export default function Rules({ fieldKey }: { fieldKey: string | undefined }) {
-  const { fields } = useContext(FieldContext);
+  const { fields, setFields } = useContext(FieldContext);
   const field = fields.find((item) => item.field_key === fieldKey);
 
-  if (!field?.rules) {
-    return null;
-  }
+  const [addRuleFieldKey, setAddRuleFieldKey] = useState('');
+  const [addRuleRuleValue, setAddRuleRuleValue] = useState('');
+
+  const handleAddRootRule = () => {
+    const newRule = {
+      rule_field_key: addRuleFieldKey,
+      rule_value: addRuleRuleValue,
+      children: [],
+    };
+
+    const updatedFields = fields.map((f) =>
+      f.field_key == fieldKey
+        ? { ...f, rules: [...(f.rules || []), newRule] }
+        : f
+    );
+
+    setFields(updatedFields);
+    setAddRuleFieldKey('');
+    setAddRuleRuleValue('');
+  };
 
   return (
     <div className="p-4 flex flex-col gap-y-2">
       <h3 className="text-lg font-semibold text-gray-900 mb-2">Rules</h3>
-      <div className="flex flex-col gap-4">
-        {field.rules.map((rule, index) => (
-          <div className="flex justify-between gap-x-4">
-            <span className="font-semibold">{`${index + 1}`}</span>
-            <RuleItem key={rule.rule_field_key} rule={rule} />
+      {field?.rules ? (
+        <div className="flex flex-col gap-4">
+          {field.rules.map((rule, index) => (
+            <div className="flex justify-between gap-x-4">
+              <span className="font-semibold">{`${index + 1}`}</span>
+              <RuleItem key={rule.rule_field_key} rule={rule} />
+            </div>
+          ))}
+        </div>
+      ) : null}
+      <div>
+        <p className="mb-2">Add new root level rule</p>
+        <FormControl className="w-full">
+          <div className="w-full flex gap-x-4 justify-between">
+            <InputLabel id="elect-field-input-label">Choose field</InputLabel>
+            <Select
+              value={addRuleFieldKey}
+              onChange={(e) => setAddRuleFieldKey(e.target.value)}
+              labelId="select-field-input-label"
+              label="Choose a field"
+              id="select-field-input"
+              className="w-full"
+            >
+              {fields.map((f) => (
+                <MenuItem value={f.field_key}>{f.field_name}</MenuItem>
+              ))}
+            </Select>
+            <TextField
+              value={addRuleRuleValue}
+              onChange={(e) => setAddRuleRuleValue(e.target.value)}
+              label="Enter field value"
+              className="w-full"
+            ></TextField>
           </div>
-        ))}
+        </FormControl>
       </div>
-      <Button variant="contained" color="primary" className="self-end">
+      <Button
+        onClick={() => handleAddRootRule()}
+        variant="contained"
+        color="primary"
+        className="self-end"
+      >
         Add Rule
       </Button>
     </div>
