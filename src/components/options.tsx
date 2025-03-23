@@ -55,8 +55,10 @@ export default function Options({
               o.option_label == optionToUpdate
                 ? {
                     ...o,
-                    option_label: editedOptions[optionToUpdate].label,
-                    option_value: editedOptions[optionToUpdate].value,
+                    option_label:
+                      editedOptions[optionToUpdate].label || o.option_label,
+                    option_value:
+                      editedOptions[optionToUpdate].value || o.option_value,
                   }
                 : o
             ),
@@ -129,7 +131,7 @@ export default function Options({
                         }))
                       }
                       onBlur={() =>
-                        handleUpdateOption({ optionToUpdate: o.option_value })
+                        handleUpdateOption({ optionToUpdate: o.option_label })
                       }
                       placeholder="Enter value"
                     />
