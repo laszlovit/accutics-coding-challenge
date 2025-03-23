@@ -5,7 +5,50 @@ import { FormControl, IconButton, InputLabel } from '@mui/material';
 import { Select, MenuItem, TextField, Button } from '@mui/material';
 import { TrashIcon } from '@heroicons/react/24/outline';
 
-function RuleItem({ rule }: { rule: Rule }) {
+function RuleItem({
+  rule,
+  indexPath,
+}: {
+  rule: Rule;
+  indexPath: { fieldIndex: number; ruleIndex: Array<number> };
+}) {
+  const { fields, setFields } = useContext(FieldContext);
+
+  const [addChildRuleFieldKey, setAddChildRuleFieldKey] = useState('');
+  const [addChildRuleValue, setAddChildRuleValue] = useState('');
+
+  const handleAddChildRule = () => {
+    const newChildRule: Rule = {
+      rule_field_key: addChildRuleFieldKey,
+      rule_value: addChildRuleValue,
+      children: [],
+    };
+
+    setFields((prevFields) =>
+      prevFields.map((field, fIndex) => {
+        if (fIndex !== indexPath.fieldIndex) return field;
+
+        const updatedRules = JSON.parse(JSON.stringify(field.rules || []));
+
+        let parentRule = updatedRules;
+        const lastIndex = indexPath.ruleIndex[indexPath.ruleIndex.length - 1];
+
+        for (let i = 0; i < indexPath.ruleIndex.length - 1; i++) {
+          parentRule = parentRule[indexPath.ruleIndex[i]].children;
+        }
+
+        const updatedParentRule = {
+          ...parentRule[lastIndex],
+          children: [...parentRule[lastIndex].children, newChildRule],
+        };
+
+        parentRule[lastIndex] = updatedParentRule;
+
+        return { ...field, rules: updatedRules };
+      })
+    );
+  };
+
   return (
     <div className="mb-3 px-6 py-5 bg-white ring-1 rounded-sm shadow-sm ring-black/5 w-full">
       <div>
@@ -25,15 +68,53 @@ function RuleItem({ rule }: { rule: Rule }) {
             <TrashIcon className="size-6" />
           </IconButton>
         </div>
-        <div className="flex justify-end mt-4">
-          <Button variant="contained" color="primary">
+        <div className="flex flex-col gap-y-2 justify-end mt-4">
+          <p>Add new child rule</p>
+          <FormControl>
+            <div className="flex gap-x-4">
+              <InputLabel id="select-field-input-label">
+                Choose field
+              </InputLabel>
+              <Select
+                value={addChildRuleFieldKey}
+                onChange={(e) => setAddChildRuleFieldKey(e.target.value)}
+                labelId="child-select-field-input-label"
+                label="Choose a field"
+                id="child-select-field-input"
+                className="w-full"
+              >
+                {fields.map((f) => (
+                  <MenuItem value={f.field_key}>{f.field_name}</MenuItem>
+                ))}
+              </Select>
+              <TextField
+                value={addChildRuleValue}
+                onChange={(e) => setAddChildRuleValue(e.target.value)}
+                label="Enter field value"
+                className="w-full"
+              ></TextField>
+            </div>
+          </FormControl>
+          <Button
+            onClick={() => handleAddChildRule()}
+            variant="contained"
+            color="primary"
+            className="self-end"
+          >
             Add Group
           </Button>
         </div>
         {rule.children.length > 0 && (
           <div className="pl-6 mt-4 border-l border-gray-200">
-            {rule.children.map((childRule) => (
-              <RuleItem key={childRule.rule_field_key} rule={childRule} />
+            {rule.children.map((childRule, index) => (
+              <RuleItem
+                key={childRule.rule_field_key}
+                rule={childRule}
+                indexPath={{
+                  fieldIndex: indexPath.fieldIndex,
+                  ruleIndex: [...indexPath.ruleIndex, index], // Store full path
+                }}
+              />
             ))}
           </div>
         )}
@@ -42,7 +123,13 @@ function RuleItem({ rule }: { rule: Rule }) {
   );
 }
 
-export default function Rules({ fieldKey }: { fieldKey: string | undefined }) {
+export default function Rules({
+  fieldKey,
+  fieldIndex,
+}: {
+  fieldKey: string | undefined;
+  fieldIndex: number;
+}) {
   const { fields, setFields } = useContext(FieldContext);
   const field = fields.find((item) => item.field_key === fieldKey);
 
@@ -50,7 +137,7 @@ export default function Rules({ fieldKey }: { fieldKey: string | undefined }) {
   const [addRuleRuleValue, setAddRuleRuleValue] = useState('');
 
   const handleAddRootRule = () => {
-    const newRule = {
+    const newRule: Rule = {
       rule_field_key: addRuleFieldKey,
       rule_value: addRuleRuleValue,
       children: [],
@@ -75,7 +162,11 @@ export default function Rules({ fieldKey }: { fieldKey: string | undefined }) {
           {field.rules.map((rule, index) => (
             <div className="flex justify-between gap-x-4">
               <span className="font-semibold">{`${index + 1}`}</span>
-              <RuleItem key={rule.rule_field_key} rule={rule} />
+              <RuleItem
+                key={`${fieldIndex}-${index}`}
+                rule={rule}
+                indexPath={{ fieldIndex: fieldIndex, ruleIndex: [index] }}
+              />
             </div>
           ))}
         </div>
@@ -84,7 +175,7 @@ export default function Rules({ fieldKey }: { fieldKey: string | undefined }) {
         <p className="mb-2">Add new root level rule</p>
         <FormControl className="w-full">
           <div className="w-full flex gap-x-4 justify-between">
-            <InputLabel id="elect-field-input-label">Choose field</InputLabel>
+            <InputLabel id="select-field-input-label">Choose field</InputLabel>
             <Select
               value={addRuleFieldKey}
               onChange={(e) => setAddRuleFieldKey(e.target.value)}

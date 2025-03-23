@@ -11,10 +11,10 @@ export default function FieldsList() {
   return (
     <List className="order-2 sm:order-1 lg:col-span-8 bg-gray-100 rounded-lg">
       <div className="p-8 flex flex-col gap-y-6">
-        {fields.map((item) => (
+        {fields.map((item, index) => (
           <FieldItem fieldName={item.field_name} key={item.field_name}>
             <Options fieldKey={item.field_key} />
-            <Rules fieldKey={item.field_key} />
+            <Rules fieldKey={item.field_key} fieldIndex={index} />
           </FieldItem>
         ))}
       </div>
