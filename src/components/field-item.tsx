@@ -10,8 +10,8 @@ import {
   ListItem,
   TextField,
 } from '@mui/material';
-import { useContext, useState } from 'react';
-import FieldContext from '../context/field-context';
+import { useState } from 'react';
+import useFieldContext from '../context/field-context';
 
 export default function FieldItem({
   fieldName,
@@ -22,7 +22,7 @@ export default function FieldItem({
   children?: React.ReactNode;
   fieldKey: string | undefined;
 }) {
-  const { fields, setFields } = useContext(FieldContext);
+  const { fields, setFields } = useFieldContext();
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedFieldName, setUpdatedFieldName] = useState<string | undefined>(

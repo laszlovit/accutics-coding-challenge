@@ -1,10 +1,10 @@
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import { useContext, useState } from 'react';
-import FieldContext from '../context/field-context';
+import { useState } from 'react';
+import useFieldContext from '../context/field-context';
 
 export default function AddField() {
-  const { fields, setFields } = useContext(FieldContext);
+  const { fields, setFields } = useFieldContext();
   const [fieldName, setFieldName] = useState('');
 
   const handleAddField = () => {

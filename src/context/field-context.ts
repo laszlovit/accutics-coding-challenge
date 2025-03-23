@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 import { Field } from '../types';
 
 type FieldContextType = {
@@ -6,9 +6,19 @@ type FieldContextType = {
   setFields: React.Dispatch<React.SetStateAction<Field[]>>;
 };
 
-const FieldContext = createContext<FieldContextType>({
+export const FieldContext = createContext<FieldContextType>({
   fields: [],
   setFields: () => {}, // Placeholder function to prevent errors
 });
 
-export default FieldContext;
+function useFieldContext() {
+  const fields = useContext(FieldContext);
+
+  if (fields == undefined) {
+    throw new Error('useFieldContext must be used with a FieldContext');
+  }
+
+  return fields;
+}
+
+export default useFieldContext;

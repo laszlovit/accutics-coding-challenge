@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import FieldContext from '../context/field-context';
+import { useState } from 'react';
+import useFieldContext from '../context/field-context';
 import { Rule } from '../types';
 import { FormControl, IconButton, InputLabel } from '@mui/material';
 import { Select, MenuItem, TextField, Button } from '@mui/material';
@@ -12,7 +12,7 @@ function RuleItem({
   rule: Rule;
   indexPath: { fieldIndex: number; ruleIndex: Array<number> };
 }) {
-  const { fields, setFields } = useContext(FieldContext);
+  const { fields, setFields } = useFieldContext();
 
   const [addChildRuleFieldKey, setAddChildRuleFieldKey] = useState('');
   const [addChildRuleValue, setAddChildRuleValue] = useState('');
@@ -47,6 +47,8 @@ function RuleItem({
         return { ...field, rules: updatedRules };
       })
     );
+    setAddChildRuleFieldKey('');
+    setAddChildRuleValue('');
   };
 
   return (
@@ -132,7 +134,7 @@ export default function Rules({
   fieldKey: string | undefined;
   fieldIndex: number;
 }) {
-  const { fields, setFields } = useContext(FieldContext);
+  const { fields, setFields } = useFieldContext();
   const field = fields.find((item) => item.field_key === fieldKey);
 
   const [addRuleFieldKey, setAddRuleFieldKey] = useState('');

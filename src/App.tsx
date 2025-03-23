@@ -3,7 +3,7 @@ import './App.css';
 import Container from './components/ui/container';
 import data from './data/test-data.json';
 import { Field } from './types';
-import FieldContext from './context/field-context';
+import { FieldContext } from './context/field-context';
 import FieldsList from './components/fields-list';
 import AddField from './components/add-field';
 

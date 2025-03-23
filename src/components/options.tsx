@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import FieldContext from '../context/field-context';
+import { useState } from 'react';
+import useFieldContext from '../context/field-context';
 
 import {
   TextField,
@@ -16,7 +16,7 @@ export default function Options({
 }: {
   fieldKey: string | undefined;
 }) {
-  const { fields, setFields } = useContext(FieldContext);
+  const { fields, setFields } = useFieldContext();
   const field = fields.find((item) => item.field_key == fieldKey);
 
   const [addOptionLabel, setAddOptionLabel] = useState('');
