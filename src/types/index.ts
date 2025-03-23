@@ -10,10 +10,10 @@ type Rule = {
 };
 
 type Field = {
-  field_key: string;
-  field_name: string;
-  options: Option[];
-  rules: Rule[];
+  field_key?: string;
+  field_name?: string;
+  options?: Option[];
+  rules?: Rule[];
 };
 
 export type { Field, Option, Rule };

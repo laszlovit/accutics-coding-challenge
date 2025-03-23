@@ -11,7 +11,7 @@ export default function FieldItem({
   fieldName,
   children,
 }: {
-  fieldName: string;
+  fieldName?: string;
   children?: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
