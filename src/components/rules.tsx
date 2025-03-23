@@ -84,7 +84,9 @@ function RuleItem({
                 className="w-full"
               >
                 {fields.map((f) => (
-                  <MenuItem value={f.field_key}>{f.field_name}</MenuItem>
+                  <MenuItem key={f.field_key} value={f.field_key}>
+                    {f.field_name}
+                  </MenuItem>
                 ))}
               </Select>
               <TextField
@@ -108,7 +110,7 @@ function RuleItem({
           <div className="pl-6 mt-4 border-l border-gray-200">
             {rule.children.map((childRule, index) => (
               <RuleItem
-                key={childRule.rule_field_key}
+                key={`${indexPath.fieldIndex}-${indexPath.ruleIndex.join('-')}-${index}`}
                 rule={childRule}
                 indexPath={{
                   fieldIndex: indexPath.fieldIndex,
@@ -160,10 +162,12 @@ export default function Rules({
       {field?.rules ? (
         <div className="flex flex-col gap-4">
           {field.rules.map((rule, index) => (
-            <div className="flex justify-between gap-x-4">
+            <div
+              key={`rule-${fieldIndex}-${index}`}
+              className="flex justify-between gap-x-4"
+            >
               <span className="font-semibold">{`${index + 1}`}</span>
               <RuleItem
-                key={`${fieldIndex}-${index}`}
                 rule={rule}
                 indexPath={{ fieldIndex: fieldIndex, ruleIndex: [index] }}
               />
@@ -185,7 +189,9 @@ export default function Rules({
               className="w-full"
             >
               {fields.map((f) => (
-                <MenuItem value={f.field_key}>{f.field_name}</MenuItem>
+                <MenuItem key={`select-${f.field_key}`} value={f.field_key}>
+                  {f.field_name}
+                </MenuItem>
               ))}
             </Select>
             <TextField

@@ -93,7 +93,7 @@ export default function Options({
         {field?.options && field.options.length > 0 ? (
           <>
             {field.options.map((o, index) => (
-              <List className="space-y-4">
+              <List key={`${fieldKey}-${o.option_label}`} className="space-y-4">
                 <ListItem className="flex justify-between items-center bg-white ring-1 rounded-sm shadow-sm ring-black/5">
                   <ListItemText primary={index + 1} />
                   <div className="flex gap-x-4">
