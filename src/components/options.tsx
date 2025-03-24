@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import useFieldContext from '../context/field-context';
 
 import {
   TextField,
@@ -10,14 +9,16 @@ import {
   IconButton,
 } from '@mui/material';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import { useFields, useFieldsActions } from '../stores/field-store';
 
 export default function Options({
   fieldKey,
 }: {
   fieldKey: string | undefined;
 }) {
-  const { fields, setFields } = useFieldContext();
+  const fields = useFields();
   const field = fields.find((item) => item.field_key == fieldKey);
+  const { addOption, updateOption, deleteOption } = useFieldsActions();
 
   const [addOptionLabel, setAddOptionLabel] = useState('');
   const [addOptionValue, setAddOptionValue] = useState('');
@@ -26,18 +27,7 @@ export default function Options({
   }>({});
 
   const handleAddOption = () => {
-    const newOption = {
-      option_label: addOptionLabel,
-      option_value: addOptionValue,
-    };
-
-    const updatedFields = fields.map((f) =>
-      f.field_key == fieldKey
-        ? { ...f, options: [...(f.options || []), newOption] }
-        : f
-    );
-
-    setFields(updatedFields);
+    addOption(fieldKey, addOptionLabel, addOptionValue);
     setAddOptionLabel('');
     setAddOptionValue('');
   };
@@ -47,26 +37,12 @@ export default function Options({
   }: {
     optionToUpdate: string;
   }) => {
-    const updatedFields = fields.map((f) =>
-      f.field_key == fieldKey
-        ? {
-            ...f,
-            options: f.options?.map((o) =>
-              o.option_label == optionToUpdate
-                ? {
-                    ...o,
-                    option_label:
-                      editedOptions[optionToUpdate].label || o.option_label,
-                    option_value:
-                      editedOptions[optionToUpdate].value || o.option_value,
-                  }
-                : o
-            ),
-          }
-        : f
+    updateOption(
+      fieldKey,
+      optionToUpdate,
+      editedOptions[optionToUpdate].label,
+      editedOptions[optionToUpdate].value
     );
-
-    setFields(updatedFields);
   };
 
   const handleDeleteOption = ({
@@ -74,18 +50,7 @@ export default function Options({
   }: {
     optionToDelete: string;
   }) => {
-    const updatedFields = fields.map((f) =>
-      f.field_key == fieldKey
-        ? {
-            ...f,
-            options: f.options?.filter(
-              (o) => o.option_label !== optionToDelete
-            ),
-          }
-        : f
-    );
-
-    setFields(updatedFields);
+    deleteOption(fieldKey, optionToDelete);
   };
 
   return (

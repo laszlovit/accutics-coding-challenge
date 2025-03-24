@@ -11,7 +11,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useState } from 'react';
-import useFieldContext from '../context/field-context';
+import { useFieldsActions } from '../stores/field-store';
 
 export default function FieldItem({
   fieldName,
@@ -22,7 +22,7 @@ export default function FieldItem({
   children?: React.ReactNode;
   fieldKey: string | undefined;
 }) {
-  const { fields, setFields } = useFieldContext();
+  const { updateField } = useFieldsActions();
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedFieldName, setUpdatedFieldName] = useState<string | undefined>(
@@ -38,11 +38,7 @@ export default function FieldItem({
   };
 
   const handleUpdateFieldName = () => {
-    const updatedFields = fields.map((f) =>
-      f.field_key == fieldKey ? { ...f, field_name: updatedFieldName } : f
-    );
-
-    setFields(updatedFields);
+    updateField(fieldKey, updatedFieldName);
     setIsEditing(false);
   };
 

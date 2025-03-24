@@ -1,11 +1,11 @@
 import List from '@mui/material/List';
 import FieldItem from './field-item';
-import useFieldContext from '../context/field-context';
 import Options from './options';
 import Rules from './rules';
+import { useFields } from '../stores/field-store';
 
 export default function FieldsList() {
-  const { fields } = useFieldContext();
+  const fields = useFields();
 
   return (
     <List className="order-2 sm:order-1 lg:col-span-8 bg-gray-100 rounded-lg">
