@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import fieldData from '../data/test-data.json';
-import { Field } from '../types';
+import { Field, Rule } from '../types';
 
 type FieldStore = {
   fields: Field[];
@@ -24,6 +24,15 @@ type FieldStore = {
     deleteOption: (
       fieldKey: string | undefined,
       optionToUDelete: string
+    ) => void;
+    addRootRule: (
+      fieldKey: string | undefined,
+      rule_field_key: string,
+      rule_value: string
+    ) => void;
+    addChildRule: (
+      indexPath: { fieldIndex: number; ruleIndex: number[] },
+      newChildRule: Rule
     ) => void;
   };
 };
@@ -100,6 +109,51 @@ const useFieldStore = create<FieldStore>((set) => ({
               }
             : field
         ),
+      })),
+    addRootRule: (
+      fieldkey: string | undefined,
+      rule_field_key: string,
+      rule_value: string
+    ) =>
+      set((state) => ({
+        fields: state.fields.map((field) =>
+          field.field_key == fieldkey
+            ? {
+                ...field,
+                rules: [
+                  ...(field.rules || []),
+                  { rule_field_key, rule_value, children: [] },
+                ],
+              }
+            : field
+        ),
+      })),
+    addChildRule: (
+      indexPath: { fieldIndex: number; ruleIndex: number[] },
+      newChildRule: Rule
+    ) =>
+      set((state) => ({
+        fields: state.fields.map((field, fIndex) => {
+          if (fIndex !== indexPath.fieldIndex) return field;
+
+          const updatedRules = JSON.parse(JSON.stringify(field.rules || []));
+
+          let parentRule = updatedRules;
+          const lastIndex = indexPath.ruleIndex[indexPath.ruleIndex.length - 1];
+
+          for (let i = 0; i < indexPath.ruleIndex.length - 1; i++) {
+            parentRule = parentRule[indexPath.ruleIndex[i]].children;
+          }
+
+          const updatedParentRule = {
+            ...parentRule[lastIndex],
+            children: [...parentRule[lastIndex].children, newChildRule],
+          };
+
+          parentRule[lastIndex] = updatedParentRule;
+
+          return { ...field, rules: updatedRules };
+        }),
       })),
   },
 }));

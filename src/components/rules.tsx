@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import useFieldContext from '../context/field-context';
 import { Rule } from '../types';
-import { FormControl, IconButton, InputLabel } from '@mui/material';
+import { FormControl, InputLabel } from '@mui/material';
 import { Select, MenuItem, TextField, Button } from '@mui/material';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { useFields, useFieldsActions } from '../stores/field-store';
 
 function RuleItem({
   rule,
@@ -12,40 +11,20 @@ function RuleItem({
   rule: Rule;
   indexPath: { fieldIndex: number; ruleIndex: Array<number> };
 }) {
-  const { fields, setFields } = useFieldContext();
+  const fields = useFields();
+  const { addChildRule } = useFieldsActions();
 
   const [addChildRuleFieldKey, setAddChildRuleFieldKey] = useState('');
   const [addChildRuleValue, setAddChildRuleValue] = useState('');
 
   const handleAddChildRule = () => {
-    const newChildRule: Rule = {
-      rule_field_key: addChildRuleFieldKey,
-      rule_value: addChildRuleValue,
-      children: [],
-    };
-
-    setFields((prevFields) =>
-      prevFields.map((field, fIndex) => {
-        if (fIndex !== indexPath.fieldIndex) return field;
-
-        const updatedRules = JSON.parse(JSON.stringify(field.rules || []));
-
-        let parentRule = updatedRules;
-        const lastIndex = indexPath.ruleIndex[indexPath.ruleIndex.length - 1];
-
-        for (let i = 0; i < indexPath.ruleIndex.length - 1; i++) {
-          parentRule = parentRule[indexPath.ruleIndex[i]].children;
-        }
-
-        const updatedParentRule = {
-          ...parentRule[lastIndex],
-          children: [...parentRule[lastIndex].children, newChildRule],
-        };
-
-        parentRule[lastIndex] = updatedParentRule;
-
-        return { ...field, rules: updatedRules };
-      })
+    addChildRule(
+      { fieldIndex: indexPath.fieldIndex, ruleIndex: indexPath.ruleIndex },
+      {
+        rule_field_key: addChildRuleFieldKey,
+        rule_value: addChildRuleValue,
+        children: [],
+      }
     );
     setAddChildRuleFieldKey('');
     setAddChildRuleValue('');
@@ -66,9 +45,6 @@ function RuleItem({
             placeholder="Enter value"
             variant="outlined"
           />
-          <IconButton color="error" size="small">
-            <TrashIcon className="size-6" />
-          </IconButton>
         </div>
         <div className="flex flex-col gap-y-2 justify-end mt-4">
           <p>Add new child rule</p>
@@ -134,26 +110,15 @@ export default function Rules({
   fieldKey: string | undefined;
   fieldIndex: number;
 }) {
-  const { fields, setFields } = useFieldContext();
+  const fields = useFields();
   const field = fields.find((item) => item.field_key === fieldKey);
+  const { addRootRule } = useFieldsActions();
 
   const [addRuleFieldKey, setAddRuleFieldKey] = useState('');
   const [addRuleRuleValue, setAddRuleRuleValue] = useState('');
 
   const handleAddRootRule = () => {
-    const newRule: Rule = {
-      rule_field_key: addRuleFieldKey,
-      rule_value: addRuleRuleValue,
-      children: [],
-    };
-
-    const updatedFields = fields.map((f) =>
-      f.field_key == fieldKey
-        ? { ...f, rules: [...(f.rules || []), newRule] }
-        : f
-    );
-
-    setFields(updatedFields);
+    addRootRule(fieldKey, addRuleFieldKey, addRuleRuleValue);
     setAddRuleFieldKey('');
     setAddRuleRuleValue('');
   };
